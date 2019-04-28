@@ -1,15 +1,18 @@
 const express = require('express')
 const fs = require('fs')
-const mongoose = require('mongoose')
 const router = express.Router()
 const showdown = require('showdown')
 const { google } = require('googleapis')
 const oauth2Client = require('../oauth2-client')
+const expressJwt = require('express-jwt')
+const User = require('../models/user')
+
+const RSA_PUBLIC_KEY = fs.readFileSync('keys/jwtRS256.key.pub')
 
 const converter = new showdown.Converter()
-
-const mongoUri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASSWORD}@${process.env.DB_HOST}/test?retryWrites=true`
-const db = mongoose.createConnection(mongoUri, { useNewUrlParser: true })
+const checkIfAuthenticated = expressJwt({
+  secret: RSA_PUBLIC_KEY,
+})
 
 /* GET home page. */
 router.get('/', (_, res) => {
@@ -19,15 +22,19 @@ router.get('/', (_, res) => {
   })
 })
 
-router.get('/list', async (req, res) => {
+router.get('/list', checkIfAuthenticated, async (req, res) => {
+  console.log(req.user)
+  const user = await User.findById(req.user.sub)
+  oauth2Client.setCredentials({
+    access_token: user.tokens.accessToken,
+    refresh_token: user.tokens.refresh_token,
+    scope: user.tokens.scope,
+    token_type: user.token_type,
+    expiry_date: user.expiry_date,
+  })
   const calendar = google.calendar({ version: 'v3', auth: oauth2Client })
   const list = await calendar.calendarList.list()
-  res.send(list)
-})
-
-router.get('/profile', async (req, res) => {
-  const profile = google.people({ version: 'v1', auth: oauth2Client })
-  res.send(await profile.people.get({ personFields: 'emailAddresses,names,photos,metadata', resourceName: 'people/me'}))
+  res.json(list)
 })
 
 module.exports = router

@@ -21,4 +21,10 @@ export class AppComponent {
       window.open(res.url);
     });
   }
+
+  getList() {
+    this.http.get('/api/list').subscribe((res) => {
+      console.log(res);
+    });
+  }
 }

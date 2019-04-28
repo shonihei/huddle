@@ -10,15 +10,22 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: true
   },
-  profileImage: {
-    url: String,
-    default: Boolean
-  },
+  profileImgUrl: String,
   email: { type: String, require: true },
+  emailVerified: Boolean,
   tokens: {
-    access_token: String,
-    refresh_token: String,
+    accessToken: String,
+    refreshToken: String,
+    scope: String,
+    tokenType: String,
+    expiryDate: Number
+  },
+  joinedAt: {
+    type: Date,
+    default: Date.now,
   }
 })
 
-module.exports = mongoose.model('User', userSchema)
+const User = mongoose.model('User', userSchema)
+
+module.exports = User
