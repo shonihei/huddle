@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, ParamMap } from '@angular/router';
-import { HttpClient } from '@angular/common/http';
+import { AuthService } from '../services/auth.service';
 
 @Component({
   selector: 'app-auth',
@@ -10,14 +10,12 @@ import { HttpClient } from '@angular/common/http';
 export class AuthComponent implements OnInit {
 
   constructor(private route: ActivatedRoute,
-              private http: HttpClient) { }
+              private auth: AuthService) { }
 
   ngOnInit() {
     this.route.queryParamMap.subscribe((params: ParamMap) => {
       console.log(params);
-      this.http.post('/api/auth', {
-        authorization_code: params.get('code')
-      }).subscribe((res) => console.log(res));
+      this.auth.authenticate(params.get('code'));
     });
   }
 

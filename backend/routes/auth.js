@@ -2,12 +2,17 @@ const express = require('express')
 const { google } = require('googleapis')
 const router = express.Router()
 const oauth2Client = require('../oauth2-client')
+const User = require('../models/user')
+const jwt = require('jsonwebtoken')
+const fs = require('fs')
 
 const scopes = [
   'profile',
   'email',
   'https://www.googleapis.com/auth/calendar'
 ]
+
+const RSA_PRIVATE_KEY = fs.readFileSync('keys/jwtRS256.key')
 
 /**
  * OAuth2 Workflow:
@@ -37,7 +42,49 @@ router.get('/', (_, res) => {
 router.post('/', async (req, res) => {
   const code = req.body.authorization_code;
   const { tokens } = await oauth2Client.getToken(code)
-  res.json(tokens);
+  const { payload } = await oauth2Client.verifyIdToken({ idToken: tokens.id_token })
+  const { name, family_name, given_name, sub, picture, email, email_verified } = payload;
+  const { access_token, refresh_token, scope, token_type, expiry_date } = tokens;
+  const update = {
+    name: {
+      displayName: name,
+      familyName: family_name,
+      givenName: given_name
+    },
+    googleId: sub,
+    profileImgUrl: picture,
+    email: email,
+    emailVerified: email_verified,
+    tokens: {
+      accessToken: access_token,
+      refreshToken: refresh_token,
+      scope: scope,
+      tokenType: token_type,
+      expiryDate: expiry_date
+    }
+  };
+
+  const queryOptions = {
+    upsert: true,
+    new: true,
+    setDefaultsOnInsert: true
+  }
+  const user = await User.findOneAndUpdate({ googleId: sub }, update, queryOptions).exec()
+
+  const expiresIn = 3 * (24 * 60 * 60) // 3 days
+  res.json({
+    expiresIn,
+    user: {
+      email,
+      name: user.name,
+      profileImgUrl: picture,
+      token: jwt.sign({}, RSA_PRIVATE_KEY, {
+        algorithm: 'RS256',
+        expiresIn,
+        subject: user.id
+      })
+    }
+  });
 })
 
 /* 
