@@ -14,6 +14,13 @@
     - `400 Bad Request` authorization code was invalid or expired
     - `500 Internal Server Error` something unexpected happened on the server end
 
+### `GET /api/auth/status/`
+  - given a jwt, validates the token and returns basic user information
+  - *Status Codes*
+    - `200 OK` jwt was validated and returned user information
+    - `401 Unauthorized` jwt was not found or was invalid
+    - `400 Bad Request` jwt was validated but the user was not found
+
 ## Rooms
 ### `GET /api/room`
   - Fetches a list of rooms that the user is registered in
