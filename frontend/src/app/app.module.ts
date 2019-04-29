@@ -6,6 +6,7 @@ import { AuthInterceptor } from './services/auth.interceptor';
 
 import { AppComponent } from './app.component';
 import { AuthComponent } from './auth/auth.component';
+import { TestComponent } from './test/test.component';
 
 const appRoutes: Routes = [
   { path: 'auth/callback', component: AuthComponent}
@@ -15,6 +16,7 @@ const appRoutes: Routes = [
   declarations: [
     AppComponent,
     AuthComponent,
+    TestComponent,
   ],
   imports: [
     BrowserModule,
@@ -25,11 +27,11 @@ const appRoutes: Routes = [
     )
   ],
   providers: [
-    {
-      provide: HTTP_INTERCEPTORS,
-      useClass: AuthInterceptor,
-      multi: true,
-    }
+    // {
+    //   provide: HTTP_INTERCEPTORS,
+    //   useClass: AuthInterceptor,
+    //   multi: true,
+    // }
   ],
   bootstrap: [AppComponent]
 })

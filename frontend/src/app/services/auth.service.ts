@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { Subject } from 'rxjs';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { Subject, ReplaySubject } from 'rxjs';
 import * as moment from 'moment';
 
 interface AuthenticatedUserName {
@@ -9,7 +9,7 @@ interface AuthenticatedUserName {
   givenName: string;
 }
 
-interface AuthenticatedUser {
+export interface AuthenticatedUser {
   email: string;
   profileImgUrl: string;
   token: string;
@@ -25,20 +25,29 @@ interface AuthResponse {
   providedIn: 'root'
 })
 export class AuthService {
-  loggedInUser: AuthenticatedUser;
-  isLoggedIn = false;
+  private loggedInUser: AuthenticatedUser;
 
-  private authState = new Subject<AuthenticatedUser>();
+  private authState = new ReplaySubject<AuthenticatedUser>(1);
   authState$ = this.authState.asObservable();
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) { 
+    this.http.get('/api/auth/status', {
+      headers: new HttpHeaders({
+        Authorization: `Bearer ${this.getToken()}`,
+      })
+    }).subscribe((res: AuthResponse) => {
+      this.loggedInUser = res.user;
+      this.authState.next(res.user);
+
+      this.setSession(res);
+    });
+  }
 
   authenticate(code: string): void {
     this.http.post('/api/auth', {
       authorization_code: code,
     }).subscribe((res: AuthResponse) => {
       this.loggedInUser = res.user;
-      this.isLoggedIn = true;
       this.authState.next(res.user);
 
       this.setSession(res);
