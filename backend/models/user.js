@@ -1,4 +1,4 @@
-const mongoose = require('mongoose')
+const mongoose = require('mongoose');
 
 const userSchema = new mongoose.Schema({
   name: {
@@ -8,24 +8,24 @@ const userSchema = new mongoose.Schema({
   },
   googleId: {
     type: String,
-    required: true
+    required: true,
   },
   profileImgUrl: String,
   email: { type: String, require: true },
   emailVerified: Boolean,
   tokens: {
-    accessToken: String,
-    refreshToken: String,
+    access_token: String,
+    refresh_token: String,
     scope: String,
-    tokenType: String,
-    expiryDate: Number
+    token_type: String,
+    expiry_date: Number,
   },
   joinedAt: {
     type: Date,
     default: Date.now,
-  }
-})
+  },
+});
 
-const User = mongoose.model('User', userSchema)
+const User = mongoose.model('User', userSchema);
 
-module.exports = User
+module.exports = User;
