@@ -24,6 +24,7 @@ const userSchema = new mongoose.Schema({
     type: Date,
     default: Date.now,
   },
+  invites: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Invite' }],
 });
 
 const User = mongoose.model('User', userSchema);
