@@ -8,6 +8,7 @@ const mongoose = require('mongoose');
 const indexRouter = require('./routes/index');
 const usersRouter = require('./routes/users');
 const authRouter = require('./routes/auth');
+const roomsRouter = require('./routes/rooms');
 const { handleUnauthorizedError } = require('./middlewares/auth-middleware');
 
 const app = express();
@@ -21,6 +22,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/api/', indexRouter);
 app.use('/api/users', usersRouter);
 app.use('/api/auth', authRouter);
+app.use('/api/rooms', roomsRouter);
 
 app.use(handleUnauthorizedError);
 
