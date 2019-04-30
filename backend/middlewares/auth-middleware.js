@@ -2,7 +2,7 @@ const expressJwt = require('express-jwt');
 const fs = require('fs');
 
 const { makeNewOauth2Client } = require('../oauth2-client');
-const User = require('../models/user');
+const User = require('../models/users');
 
 // Open public key for decoding and store in memory
 const RSA_PUBLIC_KEY = fs.readFileSync('keys/jwtRS256.key.pub');

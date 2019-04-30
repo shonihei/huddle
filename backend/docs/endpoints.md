@@ -43,11 +43,11 @@
     - `401 Unauthorized` the client is not authorized to read the details
     - `500 Internal Server Error` something unexpected happened on the server end
 
-### `PUT /api/room/<room-id>`
-  - Patches details of the room specified with the `room-id` with the given request body
+### `POST /api/room/invite`
+  - creates a request for `user-id` to join `room-id`
   - *Status Codes*
-    - `200 OK` room was successfully patched with the new information
-    - `401 Unauthorized` the client is not authorized to path room details
+    - `200 OK` request was created 
+    - `401 Unauthorized` the client is not authorized to make a request
     - `500 Internal Server Error` something unexpected happened on the server end
 
 ### `DELETE /api/room/<room-id>`

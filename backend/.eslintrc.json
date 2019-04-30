@@ -2,7 +2,8 @@
     "env": {
         "commonjs": true,
         "es6": true,
-        "node": true
+        "node": true,
+        "mocha": true
     },
     "extends": "airbnb-base",
     "globals": {
@@ -16,6 +17,8 @@
         "max-len": ["error", { "code": 80, "tabWidth": 2 }],
         "no-console": "off",
         "camelcase": 0,
-        "operator-linebreak": "off"
+        "operator-linebreak": "off",
+        "indent": ["error", 2, { "MemberExpression": 1 }],
+        "no-underscore-dangle": "off"
     }
 }

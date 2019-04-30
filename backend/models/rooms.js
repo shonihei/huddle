@@ -4,7 +4,7 @@ const roomSchema = new mongoose.Schema({
   name: String,
   slug: String,
   owner: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
-  dateCreated: Date,
+  dateCreated: { type: Date, default: Date.now },
   members: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
 });
 
