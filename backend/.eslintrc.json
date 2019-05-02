@@ -20,5 +20,13 @@
         "operator-linebreak": "off",
         "indent": ["error", 2, { "MemberExpression": 1 }],
         "no-underscore-dangle": "off"
-    }
+    },
+    "overrides": [
+        {
+            "files": ["*.test.js"],
+            "rules": {
+                "no-unused-expressions": "off"
+            }
+        }
+    ]
 }
