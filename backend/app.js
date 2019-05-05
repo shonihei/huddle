@@ -9,6 +9,7 @@ const indexRouter = require('./routes/index');
 const usersRouter = require('./routes/users');
 const authRouter = require('./routes/auth');
 const roomsRouter = require('./routes/rooms');
+const invitesRouter = require('./routes/invites');
 const { handleUnauthorizedError } = require('./middlewares/auth-middleware');
 
 const app = express();
@@ -23,6 +24,7 @@ app.use('/api/', indexRouter);
 app.use('/api/users', usersRouter);
 app.use('/api/auth', authRouter);
 app.use('/api/rooms', roomsRouter);
+app.use('/api/invites', invitesRouter);
 
 app.use(handleUnauthorizedError);
 

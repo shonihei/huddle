@@ -52,7 +52,7 @@ const createNewInvite = async (req, res) => {
 
 const updateInviteStatus = async (req, res) => {
   try {
-    if (!req.body || !req.body.invite || !req.body.status) {
+    if (!req.body || !req.params.inviteId || !req.body.status) {
       res.status(400).json({
         message: 'missing required parameters',
       });
@@ -64,7 +64,7 @@ const updateInviteStatus = async (req, res) => {
       });
     } else {
       const user = await User.findById(req.user.sub).exec();
-      const invite = await Invite.findById(req.body.invite)
+      const invite = await Invite.findById(req.params.inviteId)
         .populate({ path: 'to room' }).exec();
       if (invite.to.id !== user.id) {
         res.status(401).json({

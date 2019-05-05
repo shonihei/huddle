@@ -199,14 +199,17 @@ describe('invites-controllers', () => {
           sub: 1,
         },
         body: {
-          invite: 20,
           status: 'rejected',
+        },
+        params: {
+          inviteId: 20,
         },
       };
       const res = mockResponse();
       UserMock.expects('findById').withArgs(req.user.sub).chain('exec')
         .resolves(fakeUserB);
-      InviteMock.expects('findById').withArgs(req.body.invite).chain('populate')
+      InviteMock.expects('findById').withArgs(req.params.inviteId)
+        .chain('populate')
         .withArgs({ path: 'to room' })
         .chain('exec')
         .resolves(fakeInviteToModify);
@@ -229,8 +232,10 @@ describe('invites-controllers', () => {
           sub: 1,
         },
         body: {
-          invite: 20,
           status: 'accepted',
+        },
+        params: {
+          inviteId: 20,
         },
       };
       const res = mockResponse();
@@ -255,7 +260,8 @@ describe('invites-controllers', () => {
       });
       UserMock.expects('findById').withArgs(req.user.sub).chain('exec')
         .resolves(B);
-      InviteMock.expects('findById').withArgs(req.body.invite).chain('populate')
+      InviteMock.expects('findById').withArgs(req.params.inviteId)
+        .chain('populate')
         .withArgs({ path: 'to room' })
         .chain('exec')
         .resolves(invite);
@@ -282,8 +288,9 @@ describe('invites-controllers', () => {
         user: {
           sub: 1,
         },
-        body: {
-          invite: 20,
+        body: { },
+        params: {
+          inviteId: 20,
         },
       };
       const res = mockResponse();
@@ -300,8 +307,10 @@ describe('invites-controllers', () => {
           sub: 1,
         },
         body: {
-          invite: 20,
           status: 'this-is-malformed',
+        },
+        params: {
+          inviteId: 20,
         },
       };
       const res = mockResponse();
@@ -319,8 +328,10 @@ describe('invites-controllers', () => {
           sub: 1,
         },
         body: {
-          invite: 20,
           status: 'accepted',
+        },
+        params: {
+          inviteId: 20,
         },
       };
       const fakeInviteToC = new Invite({
@@ -331,7 +342,8 @@ describe('invites-controllers', () => {
       const res = mockResponse();
       UserMock.expects('findById').withArgs(req.user.sub).chain('exec')
         .resolves(fakeUserB);
-      InviteMock.expects('findById').withArgs(req.body.invite).chain('populate')
+      InviteMock.expects('findById').withArgs(req.params.inviteId)
+        .chain('populate')
         .withArgs({ path: 'to room' })
         .chain('exec')
         .resolves(fakeInviteToC);
@@ -351,14 +363,17 @@ describe('invites-controllers', () => {
           sub: 1,
         },
         body: {
-          invite: 20,
           status: 'pending',
+        },
+        params: {
+          inviteId: 20,
         },
       };
       const res = mockResponse();
       UserMock.expects('findById').withArgs(req.user.sub).chain('exec')
         .resolves(fakeUserB);
-      InviteMock.expects('findById').withArgs(req.body.invite).chain('populate')
+      InviteMock.expects('findById').withArgs(req.params.inviteId)
+        .chain('populate')
         .withArgs({ path: 'to room' })
         .chain('exec')
         .resolves(fakeInvite);
@@ -378,8 +393,10 @@ describe('invites-controllers', () => {
           sub: 1,
         },
         body: {
-          invite: 20,
           status: 'pending',
+        },
+        params: {
+          inviteId: 20,
         },
       };
       const res = mockResponse();
